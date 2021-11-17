@@ -1,6 +1,5 @@
 import numpy as np
-# from blpkm_cc import blpkm_cc
-from blpkm_cc_pulp import blpkm_cc
+from blpkm_cc_soft import blpkm_cc_soft
 import matplotlib.pyplot as plt
 
 # %% Create dataset
@@ -30,9 +29,12 @@ X = np.array([[2, 1],
 ml = [(1, 9), (11, 18)]
 cl = [(4, 12), (8, 19)]
 
+# %% Set control parameter for penalty
+p = 1
+
 # %% Apply BLPKM-CC
 
-labels = blpkm_cc(X, n_clusters=2, ml=ml, cl=cl, random_state=24)
+labels = blpkm_cc_soft(X, n_clusters=2, ml=ml, cl=cl, p=p, random_state=24)
 
 # %% Visualize result
 
@@ -54,58 +56,5 @@ plt.show()
 
 centers = np.zeros((2, 2))
 for i in range(2):
-    centers[i, :] = X[labels==i, :].mean(axis=0)
+    centers[i, :] = X[labels == i, :].mean(axis=0)
 
-
-# """
-# A set partitioning model of a wedding seating problem
-#
-# Authors: Stuart Mitchell 2009
-# """
-#
-# import pulp
-#
-# max_tables = 5
-# max_table_size = 4
-# guests = "A B C D E F G I J K L M N O P Q R".split()
-#
-#
-# def happiness(table):
-#     """
-#     Find the happiness of the table
-#     - by calculating the maximum distance between the letters
-#     """
-#     return abs(ord(table[0]) - ord(table[-1]))
-#
-#
-# # create list of all possible tables
-# possible_tables = [tuple(c) for c in pulp.allcombinations(guests, max_table_size)]
-#
-# # create a binary variable to state that a table setting is used
-# x = pulp.LpVariable.dicts(
-#     "table", possible_tables, lowBound=0, upBound=1, cat=pulp.LpInteger
-# )
-#
-# seating_model = pulp.LpProblem("Wedding Seating Model", pulp.LpMinimize)
-#
-# seating_model += pulp.lpSum([happiness(table) * x[table] for table in possible_tables])
-#
-# # specify the maximum number of tables
-# seating_model += (
-#     pulp.lpSum([x[table] for table in possible_tables]) <= max_tables,
-#     "Maximum_number_of_tables",
-# )
-#
-# # A guest must seated at one and only one table
-# for guest in guests:
-#     seating_model += (
-#         pulp.lpSum([x[table] for table in possible_tables if guest in table]) == 1,
-#         "Must_seat_%s" % guest,
-#     )
-#
-# seating_model.solve()
-#
-# print("The choosen tables are out of a total of %s:" % len(possible_tables))
-# for table in possible_tables:
-#     if x[table].value() == 1.0:
-#         print(table)

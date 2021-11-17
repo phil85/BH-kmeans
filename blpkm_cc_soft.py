@@ -1,4 +1,5 @@
 from scipy.spatial.distance import cdist
+from sklearn.cluster import kmeans_plusplus
 import gurobipy as gb
 import numpy as np
 
@@ -21,7 +22,7 @@ def update_centers(X, centers, n_clusters, labels):
     return centers
 
 
-def assign_objects(X, centers, ml, cl):
+def assign_objects(X, centers, ml, cl, p):
     """Assigns objects to clusters
 
     Args:
@@ -29,6 +30,7 @@ def assign_objects(X, centers, ml, cl):
         centers (np.array): current positions of cluster centers
         ml (list): must-link pairs as a list of tuples
         cl (list): cannot-link pairs as a list of tuples
+        p (float): control parameter for penalty
 
     Returns:
         np.array: cluster labels for objects
@@ -39,25 +41,34 @@ def assign_objects(X, centers, ml, cl):
     n = X.shape[0]
     k = centers.shape[0]
     distances = cdist(X, centers)
+    M = distances.max()
     assignments = {(i, j): distances[i, j] for i in range(n) for j in range(k)}
 
     # Create model
     m = gb.Model()
 
     # Add binary decision variables
-    y = m.addVars(assignments, obj=assignments, vtype=gb.GRB.BINARY)
+    x = m.addVars(assignments, vtype=gb.GRB.BINARY)
+    y = m.addVars(cl)
+    z = m.addVars(ml)
+
+    # Add objective function
+    term1 = gb.quicksum(distances[i, j] * x[i, j] for i in range(n) for j in range(k))
+    term2 = gb.quicksum(M * p * y[i, i_] for i, i_ in cl)
+    term3 = gb.quicksum(M * p * z[i, i_] for i, i_ in ml)
+    m.setObjective(term1 + term2 + term3)
 
     # Add constraints
-    m.addConstrs(y.sum(i, '*') == 1 for i in range(n))
-    m.addConstrs(y.sum('*', j) >= 1 for j in range(k))
-    m.addConstrs(y[i, j] == y[i_, j] for j in range(k) for i, i_ in ml)
-    m.addConstrs(y[i, j] + y[i_, j] <= 1 for j in range(k) for i, i_ in cl)
+    m.addConstrs(x.sum(i, '*') == 1 for i in range(n))
+    m.addConstrs(x.sum('*', j) >= 1 for j in range(k))
+    m.addConstrs(x[i, j] + x[i_, j] <= 1 + y[i, i_] for j in range(k) for i, i_ in cl)
+    m.addConstrs(x[i, j] - x[i_, j] <= z[i, i_] for j in range(k) for i, i_ in ml)
 
     # Determine optimal solution
     m.optimize()
 
     # Get labels from optimal assignment
-    labels = np.array([j for i, j in y.keys() if y[i, j].X > 0.5])
+    labels = np.array([j for i, j in x.keys() if x[i, j].X > 0.5])
 
     return labels
 
@@ -78,7 +89,7 @@ def get_total_distance(X, centers, labels):
     return dist
 
 
-def blpkm_cc(X, n_clusters, ml=[], cl=[], random_state=None, max_iter=100):
+def blpkm_cc_soft(X, n_clusters, ml=[], cl=[], p=1, random_state=None, max_iter=100):
     """Finds partition of X subject to must-link and cannot-link constraints
 
     Args:
@@ -86,6 +97,7 @@ def blpkm_cc(X, n_clusters, ml=[], cl=[], random_state=None, max_iter=100):
         n_clusters (int): predefined number of clusters
         ml (list): must-link pairs as a list of tuples
         cl (list): cannot-link pairs as a list of tuples
+        p (float): control parameter for penalty
         random_state (int, RandomState instance): random state
         max_iter (int): maximum number of iterations of blpkm_cc algorithm
 
@@ -95,13 +107,10 @@ def blpkm_cc(X, n_clusters, ml=[], cl=[], random_state=None, max_iter=100):
     """
 
     # Choose initial cluster centers randomly
-    np.random.seed(random_state)
-    center_ids = np.random.choice(np.arange(X.shape[0]), size=n_clusters,
-                                  replace=False)
-    centers = X[center_ids, :]
+    centers, _ = kmeans_plusplus(X, n_clusters=n_clusters, random_state=random_state)
 
     # Assign objects
-    labels = assign_objects(X, centers, ml, cl)
+    labels = assign_objects(X, centers, ml, cl, p)
 
     # Initialize best labels
     best_labels = labels
@@ -116,7 +125,7 @@ def blpkm_cc(X, n_clusters, ml=[], cl=[], random_state=None, max_iter=100):
     while n_iter < max_iter:
 
         # Assign objects
-        labels = assign_objects(X, centers, ml, cl)
+        labels = assign_objects(X, centers, ml, cl, p)
 
         # Update centers
         centers = update_centers(X, centers, n_clusters, labels)
