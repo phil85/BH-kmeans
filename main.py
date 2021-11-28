@@ -1,5 +1,5 @@
 import numpy as np
-from blpkm_cc_soft import blpkm_cc_soft
+from bh_kmeans import bh_kmeans
 import matplotlib.pyplot as plt
 
 # %% Create dataset
@@ -32,9 +32,9 @@ cl = [(4, 12), (8, 19)]
 # %% Set control parameter for penalty
 p = 1
 
-# %% Apply BLPKM-CC
+# %% Apply BH-kmeans
 
-labels = blpkm_cc_soft(X, n_clusters=2, ml=ml, cl=cl, p=p, random_state=24)
+labels = bh_kmeans(X, n_clusters=2, ml=ml, cl=cl, p=p, random_state=24)
 
 # %% Visualize result
 
