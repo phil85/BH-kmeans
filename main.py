@@ -34,7 +34,7 @@ p = 1
 
 # %% Apply BH-kmeans
 
-labels = bh_kmeans(X, n_clusters=2, ml=ml, cl=cl, p=p, random_state=24)
+labels = bh_kmeans(X, n_clusters=2, ml=ml, cl=cl, p=p)
 
 # %% Visualize result
 

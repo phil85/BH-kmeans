@@ -22,12 +22,12 @@ Gurobi is a commercial mathematical programming solver. Free academic licenses a
 The main.py file contains code that applies the BH-kmeans algorithm on an illustrative example.
 
 ```python
-labels = bh_kmeans(X, n_clusters=2, ml=ml, cl=cl)
+labels = bh_kmeans(X, n_clusters=2, ml=ml, cl=cl, p=p)
 ```
 
 ## Documentation
 
-The documentation of the module bh_kmeans can be found [here](https://phil85.github.io/BLPKM-CC/documentation.html).
+The documentation of the module bh_kmeans can be found [here](https://phil85.github.io/BH-kmeans/bh_kmeans.html).
 
 ## Reference
 

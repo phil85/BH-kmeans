@@ -1,0 +1,2 @@
+1) install pdoc3: pip3 install pdoc3
+2) run the following command in main directory of project: pdoc --html -o docs bh_kmeans.py
