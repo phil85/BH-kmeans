@@ -48,7 +48,7 @@ Bibtex:
 
 ## New constraint sets
 
-In the above paper, we use new constraints sets for the data sets Iris and Wine. These constraint sets are provided in the folder new constraint sets.
+In the above paper, we use new constraint sets for the data sets Iris and Wine. These constraint sets are provided in the folder new constraint sets.
 
 ## License
 
