@@ -33,7 +33,7 @@ The documentation of the module bh_kmeans can be found [here](https://phil85.git
 
 Please cite the following paper if you use this algorithm.
 
-** Baumann, P. and Hochbaum, D.S. ** (2021): A k-means algorithm for clustering with soft must-link and cannot-link constraints. Proceedings of the 11th International Conference on Pattern Recognition Applications and Methods, to appear. 
+**Baumann, P. and Hochbaum, D.S.** (2021): A k-means algorithm for clustering with soft must-link and cannot-link constraints. Proceedings of the 11th International Conference on Pattern Recognition Applications and Methods, to appear. 
 
 Bibtex:
 ```
