@@ -57,4 +57,3 @@ plt.show()
 centers = np.zeros((2, 2))
 for i in range(2):
     centers[i, :] = X[labels == i, :].mean(axis=0)
-
