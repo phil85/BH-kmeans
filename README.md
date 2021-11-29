@@ -33,16 +33,16 @@ The documentation of the module bh_kmeans can be found [here](https://phil85.git
 
 Please cite the following paper if you use this algorithm.
 
-**Baumann, P.** (2020): A Binary Linear Programming-Based K-Means Algorithm For Clustering with Must-Link and Cannot-Link Constraints. Proceedings of the 2020 IEEE International Conference on Industrial Engineering and Engineering Management, 324-328. [&rarr; available online](https://ieeexplore.ieee.org/abstract/document/9309775?casa_token=w0PlMqWmGbIAAAAA:XbuhRrVYsXYxmqucwbmMU3KHh9wNbUieJO9dbeBqDwjDMg5YF_FvYt0805CgnhgLrLswfEVDsGR4fQ)
+** Baumann, P. and Hochbaum, D.S. ** (2021): A k-means algorithm for clustering with soft must-link and cannot-link constraints. Proceedings of the 11th International Conference on Pattern Recognition Applications and Methods, to appear. 
 
 Bibtex:
 ```
-@inproceedings{baumann2020clustering,
-	author={Philipp Baumann},
-	booktitle={2020 IEEE International Conference on Industrial Engineering and Engineering Management (IEEM)},
-	title={A Binary Linear Programming-Based K-Means Algorithm For Clustering with Must-Link and Cannot-Link Constraints},
-	year={2020},
-	pages={324--328},
+@inproceedings{baumann2021kmeans,
+	author={Philipp Baumann and Dorit S. Hochbaum},
+	booktitle={Proceedings of the 11th International Conference on Pattern Recognition Applications and Methods},
+	title={A k-means algorithm for clustering with soft must-link and cannot-link constraints},
+	year={2021},
+	notes={to appear},
 }
 ```
 
