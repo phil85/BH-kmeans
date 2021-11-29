@@ -1,1 +1,0 @@
-pdoc --html "C:\Users\philipp.baumann\OneDrive - Universitaet Bern\research\software\BLPKM-CC\blpkm_cc.py"
