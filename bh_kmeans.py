@@ -1,3 +1,5 @@
+# © 2021, Universität Bern, Chair of Quantitative Methods, Philipp Baumann
+
 from scipy.spatial.distance import cdist
 from sklearn.cluster import kmeans_plusplus
 import gurobipy as gb
